@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test';
+import { NavigationPage } from '../page-objects/navigation-page';
+import { DatepickerPage } from '../page-objects/datepicker-page';
 
 test.describe('UI elements', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('https://playground.bondaracademy.com')
-
   })
 
-
   test('checkboxes', async ({ page }) => {
-    await page.getByText('Modal & Overlays').click()
-    await page.getByText('Toastr').click()
-
+    const navigateTo = new NavigationPage(page)
+    await navigateTo.toasterPage()
+    
     await page.getByRole('checkbox', {name: 'Hide on click'}).click({force: true}); // using force since original element is not visible due to styling choices.
 
     const allBoxes = page.getByRole('checkbox');
@@ -22,8 +22,8 @@ test.describe('UI elements', () => {
   })
 
   test('Standard Dropdown', async ({page}) => {
-    await page.getByText('Modal & Overlays').click()
-    await page.getByText('Toastr').click()
+    const navigateTo = new NavigationPage(page)
+    await navigateTo.toasterPage()
 
     // standard drop down
     await page.locator('.form-group', {hasText: 'Toast type'}).getByRole('combobox').selectOption('info');
@@ -31,8 +31,8 @@ test.describe('UI elements', () => {
   })
 
   test('Custom Dropdown', async ({page}) => {
-    await page.getByText('Modal & Overlays').click()
-    await page.getByText('Toastr').click()
+    const navigateTo = new NavigationPage(page)
+    await navigateTo.toasterPage()
 
     // option 1
     await page.locator('.form-group', {hasText: 'Position'}).locator('nb-select').click();
@@ -45,8 +45,8 @@ test.describe('UI elements', () => {
   })
 
   test('loop through list', async ({page}) => {
-    await page.getByText('Modal & Overlays').click()
-    await page.getByText('Toastr').click()
+    const navigateTo = new NavigationPage(page)
+    await navigateTo.toasterPage()
 
     const positionDropDownField = page.locator('.form-group', {hasText: 'Position'}).locator('nb-select');
     await positionDropDownField.click();
@@ -60,16 +60,16 @@ test.describe('UI elements', () => {
   })
 
   test('tooltips', async ({page}) => {
-    await page.getByText('Modal & Overlays').click();
-    await page.getByText('Tooltip').click();
+    const navigateTo = new NavigationPage(page)
+    navigateTo.tooltipPage()
 
     await page.getByRole('button', {name: 'Top'}).hover();
     await expect(page.getByRole('tooltip')).toHaveText('This is a tooltip');
   })
 
   test('dialog boxes', async ({page}) => {
-    await page.getByText('Tables & Data').click();
-    await page.getByText('Smart Table').click();
+    const navigateTo = new NavigationPage(page)
+    navigateTo.smartTablePage()
 
     // this is a listener to handle a browser-level dialog (not an HTML-level dialog)
     // listener must be ready before triggering the action
@@ -83,8 +83,8 @@ test.describe('UI elements', () => {
   })
 
   test('web tables - update age', async ({page}) => {
-    await page.getByText('Tables & Data').click();
-    await page.getByText('Smart Table').click();
+    const navigateTo = new NavigationPage(page)
+    navigateTo.smartTablePage()
 
     // select row by any visible text
     const tableRowByEmail = page.getByRole('row', {name: 'jack@yandex.ru'});
@@ -107,8 +107,8 @@ test.describe('UI elements', () => {
   })
 
   test('web tables loops', async ({page}) => {
-    await page.getByText('Tables & Data').click();
-    await page.getByText('Smart Table').click();
+    const navigateTo = new NavigationPage(page)
+    navigateTo.smartTablePage()
 
     const ages = ["20", "30", "40", "200"];
 
@@ -130,45 +130,24 @@ test.describe('UI elements', () => {
     }
   })
 
-  test('date selection', async ({page}) => {
-    await page.getByText('Forms').click()
-    await page.getByText('Datepicker').click()
+  // test('date selection', async ({page}) => {
+  //   const navigateTo = new NavigationPage(page)
+  //   navigateTo.datePickerPage()
 
-    const calendarInputField = page.getByPlaceholder('Form Picker')
-    await calendarInputField.click()
+  //   const calendarInputField = page.getByPlaceholder('Form Picker')
+  //   await calendarInputField.click()
 
-    await page.locator('.day-cell:not(.bounding-month)').getByText('2',{exact: true}).click()
+  //   await page.locator('.day-cell:not(.bounding-month)').getByText('2',{exact: true}).click()
 
-    await expect(calendarInputField).toHaveValue('Sep 2, 2026')
-  })
+  //   // this is not future-proof
+  //   await expect(calendarInputField).toHaveValue('Sep 2, 2026')
+  // })
 
   test('dynamic date selection using Date Object', async ({page}) => {
-    await page.getByText('Forms').click()
-    await page.getByText('Datepicker').click()
-
-    const calendarInputField = page.getByPlaceholder('Form Picker')
-    await calendarInputField.click()
-
-    const date = new Date();
-    date.setDate(date.getDate()+50)
-
-    const expectedDay = date.getDate().toString();
-    const expectedMonth = date.toLocaleString('En-US', {month: 'short'})
-    const expectedYear = date.getFullYear()
-    const expectedDate = `${expectedMonth} ${expectedDay}, ${expectedYear}`
-
-    let currentlySelectedMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
-    const currentMonthLong = date.toLocaleString('En-US', {month: 'long'})
-    const expectedMonthAndYear = `${currentMonthLong} ${expectedYear}`
-
-    while (!currentlySelectedMonthAndYear?.includes(expectedMonthAndYear)) {
-      await page.locator('.next-month').click()
-      currentlySelectedMonthAndYear = await page.locator('nb-calendar-view-mode').textContent()
-    }
-
-    await page.locator('.day-cell:not(.bounding-month)').getByText(expectedDay,{exact: true}).click()
-
-    await expect(calendarInputField).toHaveValue(expectedDate)
+    const navigateTo = new NavigationPage(page)
+    const datepickerPage = new DatepickerPage(page)
+    navigateTo.datePickerPage()
+    await datepickerPage.selectCommonDatepickerDateFromToday(1)
 
   })
 

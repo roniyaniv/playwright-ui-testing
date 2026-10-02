@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { NavigationPage } from '../page-objects/navigation-page';
 
 test.beforeEach(async ({page}) => {
   await page.goto('https://playground.bondaracademy.com')
-  await page.getByText('Forms').click()
-  await page.getByText('Form Layouts').click()
+  const navigateTo = new NavigationPage(page)
+  await navigateTo.formLayoutsPage()
 })
 
 test('Locator syntax rules', async ({page}) => {
