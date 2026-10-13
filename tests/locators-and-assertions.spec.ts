@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { NavigationPage } from '../page-objects/navigation-page';
 
 test.beforeEach(async ({page}) => {
-  await page.goto('https://playground.bondaracademy.com')
+  await page.goto('/')
   const navigateTo = new NavigationPage(page)
   await navigateTo.formLayoutsPage()
 })

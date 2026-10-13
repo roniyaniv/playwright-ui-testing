@@ -4,7 +4,7 @@ import { PageManager } from '../page-objects/page-manager';
 
 
 test.beforeEach(async ({page}) => {
-  await page.goto('https://playground.bondaracademy.com/')
+  await page.goto('/')
 })
 
 test('navigate to forms layout', async ({ page }) => {
@@ -20,7 +20,8 @@ test('navigate to forms layout', async ({ page }) => {
 test('use parameterized page object method', async ({page}) => {
 
   const pom = new PageManager(page)
-  const email = faker.internet.email()
+  const email = faker.internet.email( {provider: process.env.TEST_USER_EMAIL_DOMAIN})
+  // console.log(email);
   const password = faker.internet.password()
   const name = faker.person.fullName()
 

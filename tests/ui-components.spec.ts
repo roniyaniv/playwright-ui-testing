@@ -5,7 +5,7 @@ import { DatepickerPage } from '../page-objects/datepicker-page';
 test.describe('UI elements', () => {
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://playground.bondaracademy.com')
+    await page.goto('/')
   })
 
   test('checkboxes', async ({ page }) => {
