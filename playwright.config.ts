@@ -12,6 +12,8 @@ dotenv.config({ path: path.resolve(__dirname, process.env.TEST_ENV ? `.env.${pro
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  timeout: 10 * 1000,
+  globalTimeout: 60 * 1000,
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -51,14 +53,14 @@ export default defineConfig({
     },
 
     /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 10'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 17'] },
+    },
 
     /* Test against branded browsers. */
     // {

@@ -1,4 +1,4 @@
-import  { Page } from '@playwright/test'
+import  { Page, expect } from '@playwright/test'
 import { step } from '../helpers/test-step-decorator'
 import { HelperBase } from './helper-base'
 
@@ -14,7 +14,8 @@ export class FormLayoutsPage extends HelperBase {
     
     await usingTheGridForm.getByRole('textbox', {name: 'Email'}).fill(email)
     await usingTheGridForm.getByRole('textbox', {name: 'Password'}).fill(password)
-    await usingTheGridForm.getByLabel(optionText).check({force: true})
+    await usingTheGridForm.getByText(optionText).click()
+    await expect(usingTheGridForm.getByRole('radio', {name: optionText})).toBeChecked()
     await usingTheGridForm.getByRole('button', {name: 'Sign in'}).click()
 
   }
@@ -33,7 +34,8 @@ export class FormLayoutsPage extends HelperBase {
     await inlineForm.getByRole('textbox', {name: 'Jane Doe'}).fill(fullName)
     await inlineForm.getByRole('textbox', {name: 'Email'}).fill(email)
     if (rememberMeCheckbox == true) {
-      await inlineForm.getByRole('checkbox').check({force: true})
+      await inlineForm.getByText('Remember me').click()
+      await expect(inlineForm.getByRole('checkbox')).toBeChecked()
     }
     await inlineForm.getByRole('button', {name: 'Submit'}).click()
 
