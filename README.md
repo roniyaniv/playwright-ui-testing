@@ -97,7 +97,6 @@ Note: desktop-oriented specs may fail on the mobile projects (e.g. the sidebar i
 │   ├── form-layouts-page.ts      # Form Layouts page actions
 │   └── datepicker-page.ts        # Datepicker page actions
 ├── tests/
-│   ├── example.spec.ts                   # Playwright's generated sample (targets playwright.dev)
 │   ├── locators-and-assertions.spec.ts   # Locator and assertion exercises
 │   ├── ui-components.spec.ts             # UI component interactions
 │   ├── test-with-page-objects.spec.ts    # Tests using page objects, fixture, faker
